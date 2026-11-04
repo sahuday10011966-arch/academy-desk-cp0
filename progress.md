@@ -25,7 +25,7 @@
 - `npm run typecheck` — passed.
 - `npm run lint` — passed with Biome across 33 files.
 - `npm audit` — passed with 0 reported vulnerabilities.
-- `npm run build` — passed with Next.js 16.4.5 using webpack. In this sandbox the first build attempt failed because the generated `.next/server/app/_global-error.segments/_global-error` directory was absent and the worker could not create it; precreating that generated output directory allowed prerendering and build tracing to complete.
+- `npm run build` — passed with Next.js 16.4.5 using webpack. Two attempts hit sandbox `EPERM` errors while Next.js created generated `.next/types/app/api/auth` and `.next/server/app/_global-error.segments/_global-error` directories; precreating those ignored build-output directories allowed prerendering and build tracing to complete.
 - `git diff --cached --check` — passed before the initial commit.
 - Local production server — started. HTTP smoke requests and browser access to loopback timed out or were blocked by the sandbox, so those checks are incomplete.
 - `npm run seed:demo` — attempted with development-only placeholders in `.env.local`; it did not seed records because no MongoDB server is reachable at the local URI.
@@ -42,11 +42,13 @@
 - No production data was seeded or modified.
 - The Git CLI push was blocked by the sandbox credential helper. The requested new public repository was created under the authenticated account and populated through the GitHub connection. Its `main` commit has the exact local project tree; the remote history includes an initial README setup commit, so the remote commit SHA differs from the local commit.
 - `.env.local` now exists with ignored, development-only placeholder values. The user authorized demo seeding, but no MongoDB server is reachable at the local URI, so no records were seeded. Point it to an isolated `academy_desk_demo` database before rerunning the seed.
-- Deployment was authorized but not run. The open Vercel account has an existing `academy-desk` project linked to the separate older repository; that project was left untouched. No new Vercel project or production environment values are configured for this build.
+- Created a new Vercel Next.js project shell named `academy-desk-cp0` in the existing Vercel team. No deployment or production environment variables were added. Linking the new GitHub repository is pending installation of Vercel's GitHub App; the account's email-based sudo check failed. The direct public-repository fallback opens a clone flow that would create a second private repository, so it was not submitted.
+- The existing Vercel `academy-desk` project linked to the separate older repository was left untouched. The new project has no live URL yet.
 
 ## Remaining work
 
 - User to configure a private development MongoDB database and `AUTH_SECRET` in `.env.local`; then seed `academy_desk_demo` and verify the Coach, Player, and Scout flows end to end.
 - Run browser/API smoke checks in an environment that can reach the local Next.js server.
-- Connect a new Vercel project to the new GitHub repository; add production `MONGODB_URI` and `AUTH_SECRET` values directly in Vercel before deploying.
-- Configure a reachable development MongoDB database to seed demo accounts and verify the Coach, Player, and Scout workflows end to end. Provision real production accounts through an authorized private process.
+- Complete GitHub's email sudo check, grant Vercel access only to `academy-desk-cp0`, and connect that repository to the new Vercel project.
+- Add production `MONGODB_URI` and `AUTH_SECRET` directly in Vercel, then deploy. Configure a reachable development MongoDB database to seed demo accounts; provision real production accounts through an authorized private process.
+
