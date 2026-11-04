@@ -66,7 +66,7 @@ This is a fresh schema with no legacy data migration. Mongoose creates the decla
 
 The app can run as a Node.js Next.js application on Vercel or another Node host. Configure `MONGODB_URI` and `AUTH_SECRET` in the host’s environment settings, using separate databases and signing keys for Preview and Production. Keep the database network allowlist scoped to the application. Build with `npm run build` and serve with `npm run start`.
 
-No deployment has been created, no production database has been seeded or changed, and no GitHub changes have been pushed. Account provisioning for a real production academy should be completed through an authorized private process; the demo seed script is not intended for production.
+The demo seed script is restricted to an isolated development database and refuses to run when `NODE_ENV=production`. Provision real production accounts only through an authorized private process.
 
 ## API routes
 
@@ -76,4 +76,3 @@ No deployment has been created, no production database has been seeded or change
 - `POST /api/sessions`, `PATCH /api/sessions/:sessionId` — open a session, change attendance, or close it
 - `POST /api/matches`, `POST /api/matches/:matchId/scores` — create a match sheet and save eligible player scores
 - `GET /api/health` — generic database availability status
-
