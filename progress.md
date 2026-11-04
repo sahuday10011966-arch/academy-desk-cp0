@@ -2,7 +2,7 @@
 
 ## Starting point
 
-- The target GitHub repository was empty when inspected. The local checkout now has an initial commit and is configured with the requested repository as `origin`.
+- The originally requested GitHub repository was empty when inspected. The local checkout has an initial commit and now targets the newly created repository under the authenticated account.
 - The separate older Academy Desk checkout belongs to a different repository and was not modified or copied.
 - No competition screenshots were available in the checkout or task context, so the written requirements were used as the product source of truth. The user later confirmed the competition window is 11:00 AM–6:00 PM local time.
 - At the user's request, created a separate public repository `sahuday10011966-arch/academy-desk-cp0`; it is distinct from and does not modify the older Academy Desk repository.
@@ -33,14 +33,14 @@
 ## Workflow verification
 
 - Core readiness, eligibility, attendance uniqueness, session locking, role policy, and input validation are covered by passing automated tests.
-- Coach, Player, and Scout flows have not been verified end to end against a running MongoDB instance. No `MONGODB_URI` was configured, and no database was seeded.
+- Coach, Player, and Scout flows have not been verified end to end against a running MongoDB instance. `.env.local` has a local placeholder URI, but no database server is reachable and no records were seeded.
 - A local production server started, but loopback HTTP requests from the shell and browser tool could not reach it in this sandbox. UI/API smoke checks therefore remain incomplete.
 
 ## Deployment and data status
 
 - Not deployed; no live URL exists yet.
 - No production data was seeded or modified.
-- A local commit was created before the 6:00 PM cutoff. Push was authorized but failed: Git for Windows could not start its credential helper shell (`NtCreateDirectoryObject` access denied), and the connected GitHub account reports no push permission. No remote commit was created.
+- The Git CLI push was blocked by the sandbox credential helper. The requested new public repository was created under the authenticated account and populated through the GitHub connection. Its `main` commit has the exact local project tree; the remote history includes an initial README setup commit, so the remote commit SHA differs from the local commit.
 - `.env.local` now exists with ignored, development-only placeholder values. The user authorized demo seeding, but no MongoDB server is reachable at the local URI, so no records were seeded. Point it to an isolated `academy_desk_demo` database before rerunning the seed.
 - Deployment was authorized but not run. The open Vercel account has an existing `academy-desk` project linked to the separate older repository; that project was left untouched. No new Vercel project or production environment values are configured for this build.
 
@@ -48,5 +48,5 @@
 
 - User to configure a private development MongoDB database and `AUTH_SECRET` in `.env.local`; then seed `academy_desk_demo` and verify the Coach, Player, and Scout flows end to end.
 - Run browser/API smoke checks in an environment that can reach the local Next.js server.
-- Push the local commit through an environment with working GitHub write credentials, before the competition cutoff.
-- Configure a new deployment project, MongoDB, and auth secrets before deploying. Provision real accounts through an authorized private process.
+- Connect a new Vercel project to the new GitHub repository; add production `MONGODB_URI` and `AUTH_SECRET` values directly in Vercel before deploying.
+- Configure a reachable development MongoDB database to seed demo accounts and verify the Coach, Player, and Scout workflows end to end. Provision real production accounts through an authorized private process.
